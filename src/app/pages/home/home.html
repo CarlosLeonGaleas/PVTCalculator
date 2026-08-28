@@ -1,0 +1,67 @@
+<div class="min-h-[calc(100vh-14rem)] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  
+  <!-- Hero Heading -->
+  <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+      Selecciona un <span class="bg-gradient-to-r from-[#27348b] via-indigo-600 to-[#27348b] dark:from-sky-400 dark:via-emerald-400 dark:to-sky-400 bg-clip-text text-transparent">Módulo de Cálculo</span>
+    </h1>
+    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base font-medium">
+      Herramienta especializada para análisis termodinámico de fluidos de yacimiento y fluidos de completación.
+    </p>
+  </div>
+
+  <!-- Responsive Cards Grid (1 col mobile, 2 cols tablet, 4 cols desktop in a single row) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+    
+    @for (card of modules; track card.path) {
+      <a 
+        [routerLink]="card.path"
+        class="glass-card group flex flex-col rounded-2xl overflow-hidden p-5 cursor-pointer relative"
+      >
+        <!-- Card Header Image (16:9 illustration container) -->
+        <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-[#27348b]/60 dark:group-hover:border-sky-500/60 transition">
+          <img 
+            [src]="card.image" 
+            [alt]="card.title" 
+            class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 dark:from-slate-950/80 via-transparent to-transparent"></div>
+          
+          <!-- Badge overlay -->
+          <span 
+            [class]="'absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md text-[11px] font-bold border backdrop-blur-md ' + card.badgeColor"
+          >
+            {{ card.badge }}
+          </span>
+        </div>
+
+        <!-- Card Content -->
+        <div class="flex flex-col flex-1">
+          <!-- Main Title -->
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-[#27348b] dark:group-hover:text-sky-400 transition flex items-center gap-2 mb-1">
+            <i [class]="card.icon + ' text-[#27348b] dark:text-sky-400 text-base'"></i>
+            <span>{{ card.title }}</span>
+          </h2>
+
+          <!-- Official Subtitle / Correlation -->
+          <p class="text-[11px] font-bold text-[#27348b]/80 dark:text-amber-400/90 tracking-wide uppercase mb-3 line-clamp-2">
+            {{ card.subtitle }}
+          </p>
+
+          <!-- Brief Description -->
+          <p class="text-xs text-slate-600 dark:text-slate-400 flex-1 leading-relaxed mb-4">
+            {{ card.description }}
+          </p>
+
+          <!-- Action Button inside Card -->
+          <div class="mt-auto pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#27348b] dark:group-hover:text-sky-400 transition">
+            <span>Iniciar Cálculo</span>
+            <i class="pi pi-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </div>
+      </a>
+    }
+
+  </div>
+
+</div>

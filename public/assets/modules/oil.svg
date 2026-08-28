@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240" fill="none">
+  <rect width="400" height="240" rx="16" fill="url(#oilBg)" />
+  
+  <!-- Oil Cell & Gas Bubble Illustration -->
+  <g transform="translate(30, 30)">
+    <!-- Glass PVT Cell -->
+    <rect x="15" y="10" width="90" height="160" rx="12" fill="#0f172a" fill-opacity="0.6" stroke="#38bdf8" stroke-width="2" />
+    <!-- Oil liquid phase -->
+    <path d="M 17 80 L 103 80 L 103 158 Q 103 168 93 168 L 27 168 Q 17 168 17 158 Z" fill="url(#liquidGrad)" opacity="0.9" />
+    <!-- Gas bubbles rising -->
+    <circle cx="40" cy="110" r="6" fill="#fef08a" opacity="0.8" />
+    <circle cx="65" cy="130" r="8" fill="#fef08a" opacity="0.8" />
+    <circle cx="75" cy="95" r="5" fill="#fef08a" opacity="0.8" />
+    <circle cx="50" cy="65" r="9" fill="#f59e0b" opacity="0.8" />
+    <circle cx="80" cy="45" r="11" fill="#f59e0b" opacity="0.8" />
+    <text x="35" y="150" font-family="sans-serif" font-weight="800" font-size="12" fill="#f8fafc">OIL PHASE</text>
+    <text x="32" y="35" font-family="sans-serif" font-weight="800" font-size="12" fill="#fbbf24">GAS PHASE</text>
+  </g>
+
+  <!-- Vasquez-Beggs Bo / Rs Curves -->
+  <g transform="translate(155, 30)">
+    <rect x="0" y="0" width="215" height="160" rx="12" fill="#0f172a" fill-opacity="0.85" stroke="#38bdf8" stroke-width="1.5" />
+    <line x1="20" y1="40" x2="195" y2="40" stroke="#1e293b" />
+    <line x1="20" y1="80" x2="195" y2="80" stroke="#1e293b" />
+    <line x1="20" y1="120" x2="195" y2="120" stroke="#1e293b" />
+    
+    <!-- Bo Curve -->
+    <path d="M 25 130 L 100 50 L 190 70" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" />
+    <!-- Bubble Point Marker -->
+    <line x1="100" y1="15" x2="100" y2="145" stroke="#fbbf24" stroke-dasharray="3 3" stroke-width="1.5" />
+    <circle cx="100" cy="50" r="5" fill="#fbbf24" />
+    <text x="108" y="45" font-family="sans-serif" font-weight="700" font-size="10" fill="#fbbf24">Pb (Bubble Point)</text>
+
+    <!-- Rs Curve -->
+    <path d="M 25 140 L 100 70 L 190 70" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6 3" />
+    <text x="135" y="95" font-family="sans-serif" font-weight="700" font-size="10" fill="#ef4444">Bo Curve</text>
+    <text x="135" y="115" font-family="sans-serif" font-weight="700" font-size="10" fill="#38bdf8">Rs Curve</text>
+  </g>
+
+  <defs>
+    <linearGradient id="oilBg" x1="0" y1="0" x2="400" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f172a" />
+      <stop offset="1" stop-color="#881337" />
+    </linearGradient>
+    <linearGradient id="liquidGrad" x1="17" y1="80" x2="103" y2="168" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9a3412" />
+      <stop offset="1" stop-color="#451a03" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180" fill="none">
+  <rect width="320" height="180" rx="16" fill="url(#bg3)" />
+  <rect x="2" y="2" width="316" height="176" rx="14" stroke="#10b981" stroke-opacity="0.3" stroke-width="2" />
+  
+  <g transform="translate(25, 45)">
+    <!-- Oil Droplet & PVT Curve Graph Icon -->
+    <path d="M45 15 C45 15 70 50 70 70 C70 85 58 95 45 95 C32 95 20 85 20 70 C20 50 45 15 45 15 Z" fill="url(#dropGrad)" />
+    <path d="M45 40 Q55 60 50 78 Q45 90 35 85" fill="none" stroke="#6ee7b7" stroke-width="2.5" opacity="0.7" />
+    
+    <!-- Sparkles / Flame -->
+    <path d="M75 35 L78 45 L88 48 L78 51 L75 61 L72 51 L62 48 L72 45 Z" fill="#fbbf24" />
+  </g>
+
+  <!-- Typography -->
+  <text x="125" y="70" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="22" fill="#ffffff" letter-spacing="1">PVT FLUID</text>
+  <text x="125" y="96" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="18" fill="#10b981" letter-spacing="2">CALCULATOR</text>
+  <rect x="125" y="108" width="165" height="3" rx="1.5" fill="url(#lineGrad3)" />
+  <text x="125" y="128" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="10" fill="#a7f3d0" letter-spacing="1.5">SIMULACIÓN TERMODINÁMICA</text>
+
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#064e3b" />
+      <stop offset="1" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="dropGrad" x1="20" y1="15" x2="70" y2="95" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981" />
+      <stop offset="1" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="lineGrad3" x1="125" y1="108" x2="290" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981" />
+      <stop offset="1" stop-color="#34d399" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

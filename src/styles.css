@@ -1,1 +1,91 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+
+@source "./src";
+
+/* Global Color Variables */
+:root {
+  --color-primary: #27348b;
+  --color-primary-hover: #1e286d;
+  --color-accent: #ff8000;
+  --color-accent-hover: #e07000;
+}
+
+/* Light Mode (Default) */
+html:not(.dark), html.light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) body, html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Glassmorphism Panel - Light Mode */
+html:not(.dark) .glass-panel, html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(39, 52, 139, 0.15);
+  box-shadow: 0 4px 20px -5px rgba(39, 52, 139, 0.08);
+}
+
+/* Glassmorphism Card - Light Mode */
+html:not(.dark) .glass-card, html.light .glass-card {
+  background: #ffffff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 15px -3px rgba(39, 52, 139, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html:not(.dark) .glass-card:hover, html.light .glass-card:hover {
+  background: #ffffff;
+  border-color: rgba(39, 52, 139, 0.5);
+  box-shadow: 0 12px 30px -8px rgba(39, 52, 139, 0.18);
+  transform: translateY(-4px);
+}
+
+/* Dark Mode Overrides */
+html.dark {
+  background-color: #0b0f17 !important;
+  color: #f8fafc !important;
+}
+
+html.dark body {
+  background-color: #0b0f17 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+html.dark .glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .glass-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 12px 30px -10px rgba(56, 189, 248, 0.25);
+  transform: translateY(-4px);
+}
+
+/* Common Base Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}

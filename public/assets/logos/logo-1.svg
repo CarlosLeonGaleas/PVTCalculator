@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180" fill="none">
+  <rect width="320" height="180" rx="16" fill="url(#bg1)" />
+  <rect x="2" y="2" width="316" height="176" rx="14" stroke="#e2e8f0" stroke-opacity="0.2" stroke-width="2" />
+  
+  <g transform="translate(24, 40)">
+    <!-- Academic Shield / Emblem -->
+    <path d="M50 10 L85 30 L85 70 C85 95 50 115 50 115 C50 115 15 95 15 70 L15 30 Z" fill="url(#shieldGrad)" stroke="#fbbf24" stroke-width="3" />
+    <path d="M50 25 L73 38 L73 68 C73 86 50 100 50 100 C50 100 27 86 27 68 L27 38 Z" fill="#1e1b4b" opacity="0.6" />
+    
+    <!-- Torch Symbol -->
+    <path d="M50 40 L50 85 M43 85 L57 85 M45 45 Q50 32 55 45 Q62 55 50 70 Q38 55 45 45 Z" fill="#f59e0b" stroke="#fef08a" stroke-width="2" />
+    <circle cx="50" cy="40" r="5" fill="#ef4444" />
+  </g>
+
+  <!-- Typography -->
+  <text x="130" y="72" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="18" fill="#ffffff" letter-spacing="1">UNIVERSITARIO</text>
+  <text x="130" y="98" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="22" fill="#fbbf24" letter-spacing="1.5">RUMIÑAHUI</text>
+  <rect x="130" y="110" width="160" height="3" rx="1.5" fill="url(#lineGrad)" />
+  <text x="130" y="130" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="11" fill="#94a3b8" letter-spacing="2">INSTITUTO TECNOLÓGICO</text>
+
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f172a" />
+      <stop offset="1" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="15" y1="10" x2="85" y2="115" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b91c1c" />
+      <stop offset="1" stop-color="#7f1d1d" />
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="130" y1="110" x2="290" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24" />
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

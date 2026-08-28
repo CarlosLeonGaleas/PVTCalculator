@@ -1,0 +1,43 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+  
+  <!-- Module Banner with Image + Official Title -->
+  <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 border border-[#ff8000]/30 dark:border-amber-500/20 shadow-xl">
+    <div class="w-full md:w-64 h-40 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex-shrink-0 shadow-md">
+      <img [src]="imagePath" [alt]="pageTitle" class="w-full h-full object-cover" />
+    </div>
+    
+    <div class="space-y-3 text-center md:text-left flex-1">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff8000]/10 text-[#ff8000] border border-[#ff8000]/30 text-xs font-bold uppercase tracking-wider">
+        <i class="pi pi-database"></i> Módulo 1 • Compresibilidad de Formación
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-white tracking-tight">
+        {{ pageTitle }}
+      </h1>
+      <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm max-w-2xl font-medium">
+        Cálculo de la compresibilidad de poro ($C_f$) ajustado por la correlación empírica de Newman para rocas consolidadas y semi-consolidadas.
+      </p>
+    </div>
+
+    <a routerLink="/" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 text-[#27348b] dark:text-slate-300 hover:bg-[#27348b] hover:text-white dark:hover:bg-slate-700 dark:hover:text-white transition text-xs font-bold border border-slate-300 dark:border-slate-700 shadow-sm">
+      <i class="pi pi-arrow-left"></i>
+      <span>Regresar</span>
+    </a>
+  </div>
+
+  <!-- Form & Calculation Placeholder Container -->
+  <div class="glass-card rounded-2xl p-8 border border-slate-200 dark:border-slate-800 text-center space-y-4 my-8">
+    <div class="w-16 h-16 rounded-full bg-[#ff8000]/10 text-[#ff8000] flex items-center justify-center mx-auto text-2xl border border-[#ff8000]/20">
+      <i class="pi pi-sliders-h"></i>
+    </div>
+    <h2 class="text-xl font-bold text-[#27348b] dark:text-white">Formulario de Entrada de Datos (Newman)</h2>
+    <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto font-medium">
+      Este módulo contendrá los campos de entrada de Porosidad ($\phi$), Tipo de Roca y Presión de Yacimiento para estimar $C_f$.
+    </p>
+    <div class="pt-4">
+      <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-xs font-mono border border-slate-200 dark:border-slate-700">
+        [ Estado: Estructura de Navegación Lista ]
+      </span>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,92 @@
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 text-slate-600 dark:text-slate-400 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-6 text-center lg:text-left">
+    
+    <!-- Left 50% Section: Copyright & Theme Switcher below -->
+    <div class="space-y-3 flex flex-col items-center lg:items-start">
+      <!-- Copyright Info -->
+      <div class="space-y-1">
+        <p class="text-sm font-bold text-[#27348b] dark:text-slate-200 flex items-center justify-center lg:justify-start gap-1.5">
+          <span>© {{ currentYear }} Universitario Rumiñahui</span>
+        </p>
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+          Cálculadora de Propiedades PVT y Fluidos de Completación
+        </p>
+      </div>
+
+      <!-- Theme Switcher below Copyright -->
+      <div class="inline-flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-inner">
+        <!-- System Preference Button -->
+        <button 
+          type="button"
+          (click)="setMode('system')"
+          [class]="'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ' + 
+            (themeService.themeMode() === 'system' 
+              ? 'bg-[#27348b] text-white shadow-sm font-bold' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-[#27348b] dark:hover:text-white')"
+          title="Preferencias del Sistema"
+        >
+          <i class="pi pi-desktop text-xs"></i>
+          <span>Sistema</span>
+        </button>
+        
+        <!-- Light Mode Button -->
+        <button 
+          type="button"
+          (click)="setMode('light')"
+          [class]="'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ' + 
+            (themeService.themeMode() === 'light' 
+              ? 'bg-[#27348b] text-white shadow-sm font-bold' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-[#27348b] dark:hover:text-white')"
+          title="Modo Claro"
+        >
+          <i class="pi pi-sun text-xs"></i>
+          <span>Claro</span>
+        </button>
+
+        <!-- Dark Mode Button -->
+        <button 
+          type="button"
+          (click)="setMode('dark')"
+          [class]="'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ' + 
+            (themeService.themeMode() === 'dark' 
+              ? 'bg-[#27348b] text-white shadow-sm font-bold' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-[#27348b] dark:hover:text-white')"
+          title="Modo Oscuro"
+        >
+          <i class="pi pi-moon text-xs"></i>
+          <span>Oscuro</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right 50% Section: Project & Team Badges -->
+    <div class="flex flex-wrap items-center justify-center lg:justify-end gap-2 text-xs">
+      
+      <!-- Project Badge -->
+      <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#ff8000]/10 text-[#ff8000] border border-[#ff8000]/30 font-bold">
+        <i class="pi pi-bookmark text-xs"></i>
+        <span>Proyecto I+D+i 2026</span>
+      </span>
+
+      <!-- Director Badge -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        <i class="pi pi-user text-xs text-[#27348b] dark:text-sky-400"></i>
+        <span><strong class="text-slate-900 dark:text-slate-100">Mg. Valeria Tipán</strong> (Directora)</span>
+      </span>
+
+      <!-- Member Badge -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        <i class="pi pi-users text-xs text-[#27348b] dark:text-sky-400"></i>
+        <span><strong class="text-slate-900 dark:text-slate-100">Mg. Erika Quinapallo</strong> (Integrante)</span>
+      </span>
+
+      <!-- Developer Badge -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        <i class="pi pi-code text-xs text-[#27348b] dark:text-sky-400"></i>
+        <span><strong class="text-slate-900 dark:text-slate-100">Ing. Carlos León</strong> (Desarrollador)</span>
+      </span>
+
+    </div>
+
+  </div>
+</footer>

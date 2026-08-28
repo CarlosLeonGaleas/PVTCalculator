@@ -1,0 +1,129 @@
+<!-- Main Header & AppBar Container -->
+<header class="sticky top-0 z-50 glass-panel border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
+  <!-- Top AppBar: 3 Logos Side-by-side & Brand Info -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div class="flex items-center justify-between gap-4">
+      
+      <!-- Left: Logo 1 (Institutional) -->
+      <a routerLink="/" class="flex-shrink-0 transition-transform hover:scale-105 p-1.5 rounded-xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center justify-center">
+        <img 
+          src="/assets/logos/UniversitarioRU_Azul.svg" 
+          alt="Universitario Rumiñahui Logo" 
+          class="h-10 sm:h-12 md:h-14 w-auto object-contain rounded-lg"
+        />
+      </a>
+
+      <!-- Center: Logo 2 (Coordinación Petróleos Emblem - 1:1 Square) -->
+      <div class="flex-shrink-0 p-1.5 rounded-xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center justify-center">
+        <img 
+          src="/assets/logos/logo-2.svg" 
+          alt="Coordinación Petróleos" 
+          class="h-10 sm:h-12 md:h-14 aspect-square object-contain rounded-lg"
+        />
+      </div>
+
+      <!-- Right: Logo 3 (PVT Calculator Product) & Mobile Menu Button -->
+      <div class="flex items-center gap-3">
+        <a routerLink="/" class="flex-shrink-0 transition-transform hover:scale-105 p-1.5 rounded-xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center justify-center">
+          <img 
+            src="/assets/logos/Investigacion_LogoColor.svg" 
+            alt="PVT Fluid Calculator Logo" 
+            class="h-10 sm:h-12 md:h-14 w-auto object-contain rounded-lg"
+          />
+        </a>
+
+        <!-- Mobile Drawer Toggle Button (Visible when inside a module page on mobile) -->
+        @if (!isHomePage()) {
+          <button 
+            type="button"
+            (click)="toggleMobileMenu()" 
+            class="md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-[#27348b] dark:text-sky-400 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+            aria-label="Abrir Menú de Navegación"
+          >
+            <i class="pi pi-bars text-xl"></i>
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Secondary Navigation Menu (Shown when inside calculation routes) -->
+  @if (!isHomePage()) {
+    <nav class="bg-slate-100/90 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 shadow-inner">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Desktop Horizontal Options Bar -->
+        <div class="hidden md:flex items-center justify-around py-2 gap-2 overflow-x-auto">
+          @for (item of navOptions; track item.path) {
+            <a 
+              [routerLink]="item.path"
+              routerLinkActive="bg-[#27348b]/15 text-[#27348b] border-[#27348b]/40 dark:bg-sky-500/20 dark:text-sky-400 dark:border-sky-500/50 shadow-sm font-bold"
+              class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 border border-transparent hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/80 hover:text-[#27348b] dark:hover:text-white transition"
+            >
+              <i [class]="item.icon + ' text-base text-[#27348b] dark:text-sky-400'"></i>
+              <span>{{ item.title }}</span>
+            </a>
+          }
+        </div>
+
+        <!-- Mobile Quick Breadcrumb / Bar Header -->
+        <div class="md:hidden flex items-center justify-between py-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+          <span class="flex items-center gap-1.5 text-[#27348b] dark:text-sky-400 font-bold">
+            <i class="pi pi-th-large"></i> Módulos de Cálculo PVT
+          </span>
+          <button 
+            (click)="toggleMobileMenu()"
+            class="text-xs text-[#27348b] dark:text-sky-400 underline font-semibold flex items-center gap-1"
+          >
+            <span>Cambiar Módulo</span>
+            <i class="pi pi-chevron-down text-[10px]"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  }
+</header>
+
+<!-- Mobile Navigation Sidebar / Modal (PrimeNG Sidebar) -->
+<p-sidebar 
+  [(visible)]="isMobileMenuOpen" 
+  position="right"
+  [modal]="true"
+  styleClass="!bg-white dark:!bg-slate-900 !text-slate-900 dark:!text-slate-100 border-l border-slate-200 dark:border-slate-800"
+>
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-2 text-[#27348b] dark:text-sky-400 font-bold text-lg">
+      <i class="pi pi-compass text-xl text-[#27348b] dark:text-sky-400"></i>
+      <span>Navegación PVT</span>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-3 mt-4">
+    <a 
+      routerLink="/"
+      (click)="isMobileMenuOpen.set(false)"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition font-medium"
+    >
+      <i class="pi pi-home text-lg text-[#27348b] dark:text-sky-400"></i>
+      <span class="font-bold">Inicio / Menú Principal</span>
+    </a>
+
+    <div class="h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+
+    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Módulos de Cálculo</p>
+
+    @for (item of navOptions; track item.path) {
+      <a 
+        [routerLink]="item.path"
+        routerLinkActive="bg-[#27348b]/15 text-[#27348b] border-[#27348b]/50 dark:bg-sky-500/20 dark:text-sky-400 dark:border-sky-500/60 font-bold"
+        (click)="isMobileMenuOpen.set(false)"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+      >
+        <i [class]="item.icon + ' text-lg text-[#27348b] dark:text-sky-400'"></i>
+        <span class="text-sm font-semibold">{{ item.title }}</span>
+      </a>
+    }
+  </div>
+</p-sidebar>
