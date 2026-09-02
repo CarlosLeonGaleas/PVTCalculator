@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
   
   <!-- Module Banner with Image + Official Title -->
   <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 border border-[#ff8000]/30 dark:border-amber-500/20 shadow-xl">
@@ -13,8 +13,8 @@
       <h1 class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-white tracking-tight">
         {{ pageTitle }}
       </h1>
-      <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm max-w-2xl font-medium">
-        Cálculo de la compresibilidad de poro ($C_f$) ajustado por la correlación empírica de Newman para rocas consolidadas y semi-consolidadas.
+      <p class="text-slate-700 dark:text-slate-300 text-sm max-w-2xl font-medium leading-relaxed">
+        Estimación de la compresibilidad del volumen poroso (Cf) ajustada por la correlación empírica de Newman según litología y la compresibilidad directa del fluido (Cfluido).
       </p>
     </div>
 
@@ -24,20 +24,353 @@
     </a>
   </div>
 
-  <!-- Form & Calculation Placeholder Container -->
-  <div class="glass-card rounded-2xl p-8 border border-slate-200 dark:border-slate-800 text-center space-y-4 my-8">
-    <div class="w-16 h-16 rounded-full bg-[#ff8000]/10 text-[#ff8000] flex items-center justify-center mx-auto text-2xl border border-[#ff8000]/20">
-      <i class="pi pi-sliders-h"></i>
+  <!-- Sub-mode Navigation Tabs -->
+  <div class="glass-panel p-2 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-2 shadow-sm">
+    <button 
+      type="button" 
+      (click)="selectTab('pore')"
+      [class]="activeTab === 'pore' 
+        ? 'w-full sm:w-1/2 py-3 px-4 rounded-xl bg-[#27348b] text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2' 
+        : 'w-full sm:w-1/2 py-3 px-4 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer'"
+    >
+      <i class="pi pi-database text-base"></i>
+      <span>Compresibilidad del Volumen Poroso (Cf)</span>
+    </button>
+
+    <button 
+      type="button" 
+      (click)="selectTab('fluid')"
+      [class]="activeTab === 'fluid' 
+        ? 'w-full sm:w-1/2 py-3 px-4 rounded-xl bg-[#27348b] text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2' 
+        : 'w-full sm:w-1/2 py-3 px-4 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer'"
+    >
+      <i class="pi pi-filter text-base"></i>
+      <span>Compresibilidad del Fluido (Cfluido)</span>
+    </button>
+  </div>
+
+  <!-- Main Grid: Form Inputs (Left) & Results (Right) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN: Input Variables (7 cols) -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Toolbar & Actions -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#27348b]/10 dark:bg-sky-500/10 text-[#27348b] dark:text-sky-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-sliders-h"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Variables de Operación</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              {{ activeInputCountSubtitle }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            (click)="loadSampleData()"
+            class="px-3.5 py-2 rounded-xl bg-[#ff8000]/10 hover:bg-[#ff8000]/20 text-[#ff8000] border border-[#ff8000]/30 text-xs font-extrabold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-sparkles"></i>
+            <span>Cargar Ejemplo</span>
+          </button>
+          
+          <button 
+            type="button" 
+            (click)="clearForm()"
+            class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-trash"></i>
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODE A: Pore Compressibility (Cf) Form -->
+      <div *ngIf="activeTab === 'pore'" class="space-y-6">
+        
+        <!-- Constantes Automáticas a, b, c Banner -->
+        <div class="glass-panel rounded-2xl p-5 border border-indigo-200 dark:border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="pi pi-lock text-[#27348b] dark:text-sky-400 text-base"></i>
+              <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+                Constantes de Litología (Newman)
+              </h3>
+            </div>
+            
+            <span 
+              *ngIf="currentConstants"
+              class="px-3 py-1 rounded-full text-xs font-extrabold bg-[#ff8000]/10 text-[#ff8000] border border-[#ff8000]/30"
+            >
+              {{ currentConstants.label }}
+            </span>
+          </div>
+
+          <div *ngIf="currentConstants" class="grid grid-cols-3 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800 text-center font-mono">
+            <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante a</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">{{ currentConstants.a }}</span>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante b</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">{{ currentConstants.b }}</span>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante c</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">{{ currentConstants.c }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Inputs Card -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+          <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+            <i class="pi pi-filter text-[#27348b] dark:text-sky-400 text-base"></i>
+            <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+              Parámetros de Roca y Porosidad
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Litología Selector -->
+            <div class="sm:col-span-2">
+              <label for="lithology" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+                Litología de la Formación
+              </label>
+              <select
+                id="lithology"
+                [(ngModel)]="poreInputs.lithology"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm cursor-pointer"
+              >
+                <option value="sandstone">Areniscas Consolidadas</option>
+                <option value="limestone">Calizas (Carbonatos)</option>
+              </select>
+            </div>
+
+            <!-- Porosidad Efectiva (φ) -->
+            <div class="sm:col-span-2">
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="effectivePorosity" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100">
+                  Porosidad Efectiva (&phi;) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[fracción]</span>
+                </label>
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Ejemplo: 0.2 para 20%</span>
+              </div>
+              <input 
+                id="effectivePorosity"
+                type="number" 
+                step="any"
+                [(ngModel)]="poreInputs.effectivePorosity"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MODE B: Fluid Compressibility (Cfluid) Form -->
+      <div *ngIf="activeTab === 'fluid'" class="space-y-6">
+        
+        <!-- Form Inputs Card -->
+        <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+          <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+            <i class="pi pi-filter text-[#27348b] dark:text-sky-400 text-base"></i>
+            <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+              Datos Experimentos de Laboratorio (P-V)
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Volumen Inicial (Vi) -->
+            <div>
+              <label for="initialVolume" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+                Volumen Inicial (Vi) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[cm³]</span>
+              </label>
+              <input 
+                id="initialVolume"
+                type="number" 
+                step="any"
+                [(ngModel)]="fluidInputs.initialVolume"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+              />
+            </div>
+
+            <!-- Cambio de Volumen (ΔV) -->
+            <div>
+              <label for="volumeChange" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+                Cambio de Volumen (&Delta;V) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[cm³]</span>
+              </label>
+              <input 
+                id="volumeChange"
+                type="number" 
+                step="any"
+                [(ngModel)]="fluidInputs.volumeChange"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+              />
+            </div>
+
+            <!-- Cambio de Presión (ΔP) -->
+            <div class="sm:col-span-2">
+              <label for="pressureChange" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+                Cambio de Presión (&Delta;P) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+              </label>
+              <input 
+                id="pressureChange"
+                type="number" 
+                step="any"
+                [(ngModel)]="fluidInputs.pressureChange"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
-    <h2 class="text-xl font-bold text-[#27348b] dark:text-white">Formulario de Entrada de Datos (Newman)</h2>
-    <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto font-medium">
-      Este módulo contendrá los campos de entrada de Porosidad ($\phi$), Tipo de Roca y Presión de Yacimiento para estimar $C_f$.
-    </p>
-    <div class="pt-4">
-      <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-xs font-mono border border-slate-200 dark:border-slate-700">
-        [ Estado: Estructura de Navegación Lista ]
-      </span>
+
+    <!-- RIGHT COLUMN: Calculated Results (5 cols) -->
+    <div class="lg:col-span-5 space-y-4 sticky top-6">
+      
+      <!-- Results Section Title Card -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-chart-bar"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Resultado Calculado</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              {{ activeResultSubtitle }}
+            </p>
+          </div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-extrabold">
+          En Tiempo Real
+        </span>
+      </div>
+
+      <!-- Result Card: MODE A (Compresibilidad Pore Cf) -->
+      <div *ngIf="activeTab === 'pore'" class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition space-y-6">
+        
+        <div class="space-y-2">
+          <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <i class="pi pi-database text-[#27348b] dark:text-sky-400 text-base"></i>
+            Compresibilidad del Volumen Poroso (Cf)
+          </span>
+
+          <!-- High Contrast Formula Container -->
+          <div>
+            <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-3 py-1.5 rounded-lg inline-block font-mono border border-indigo-100 dark:border-slate-700 leading-normal">
+              = (a / (1 + b &times; &phi;)^c) &times; 10⁻⁶
+            </span>
+          </div>
+        </div>
+
+        <!-- Calculated Values Display -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4">
+          
+          <!-- Scientific Notation Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Notación Científica
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatScientific(poreResult) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+          <!-- Decimal Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Representación Decimal
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 font-mono tracking-tight">
+                {{ formatDecimal(poreResult, 10) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Result Card: MODE B (Compresibilidad Fluido Cfluid) -->
+      <div *ngIf="activeTab === 'fluid'" class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition space-y-6">
+        
+        <div class="space-y-2">
+          <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <i class="pi pi-filter text-[#27348b] dark:text-sky-400 text-base"></i>
+            Compresibilidad del Fluido (Cfluido)
+          </span>
+
+          <!-- High Contrast Formula Container -->
+          <div>
+            <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-3 py-1.5 rounded-lg inline-block font-mono border border-indigo-100 dark:border-slate-700 leading-normal">
+              = - (1 / Vi) &times; (&Delta;V / &Delta;P)
+            </span>
+          </div>
+        </div>
+
+        <!-- Calculated Values Display -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4">
+          
+          <!-- Scientific Notation Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Notación Científica
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatScientific(fluidResult) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+          <!-- Decimal Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Representación Decimal
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 font-mono tracking-tight">
+                {{ formatDecimal(fluidResult, 8) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 
 </div>
