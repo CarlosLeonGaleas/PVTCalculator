@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
   
   <!-- Module Banner with Image + Official Title -->
   <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 border border-sky-500/30 dark:border-sky-500/20 shadow-xl">
@@ -8,13 +8,13 @@
     
     <div class="space-y-3 text-center md:text-left flex-1">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-400 border border-sky-500/30 text-xs font-bold uppercase tracking-wider">
-        <i class="pi pi-sun"></i> Módulo 3 • Compresibilidad Agua Salina
+        <i class="pi pi-tint"></i> Módulo 3 • Compresibilidad Agua Salina
       </div>
       <h1 class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-white tracking-tight">
         {{ pageTitle }}
       </h1>
-      <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm max-w-2xl font-medium">
-        Correlación empírica de Osif (1988) para calcular la compresibilidad del agua de formación ($C_w$) considerando altas concentraciones de salinidad (ppm de NaCl) y presión.
+      <p class="text-slate-700 dark:text-slate-300 text-sm max-w-2xl font-medium leading-relaxed">
+        Correlación empírica de Osif (1988) para calcular la compresibilidad del agua de formación ($c_w$) considerando la presión de yacimiento, concentración de salinidad y temperatura.
       </p>
     </div>
 
@@ -24,20 +24,189 @@
     </a>
   </div>
 
-  <!-- Form & Calculation Placeholder Container -->
-  <div class="glass-card rounded-2xl p-8 border border-slate-200 dark:border-slate-800 text-center space-y-4 my-8">
-    <div class="w-16 h-16 rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-400 flex items-center justify-center mx-auto text-2xl border border-sky-500/20">
-      <i class="pi pi-tint"></i>
+  <!-- Main Grid: Form Inputs (Left) & Results (Right) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN: Input Variables (7 cols) -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Toolbar & Actions -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#27348b]/10 dark:bg-sky-500/10 text-[#27348b] dark:text-sky-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-sliders-h"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Variables de Operación</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">3 datos de entrada requeridos</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            (click)="loadSampleData()"
+            class="px-3.5 py-2 rounded-xl bg-[#ff8000]/10 hover:bg-[#ff8000]/20 text-[#ff8000] border border-[#ff8000]/30 text-xs font-extrabold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-sparkles"></i>
+            <span>Cargar Ejemplo</span>
+          </button>
+          
+          <button 
+            type="button" 
+            (click)="clearForm()"
+            class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-trash"></i>
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Inputs Form Card -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+        <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <i class="pi pi-filter text-[#27348b] dark:text-sky-400 text-base"></i>
+          <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+            Propiedades del Agua de Yacimiento
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5">
+          <!-- Presión (P) -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="pressure" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100">
+                Presión (P) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psia]</span>
+              </label>
+              <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Hasta 20,000 psia</span>
+            </div>
+            <input 
+              id="pressure"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.pressure"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Salinidad (S) -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="salinity" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100">
+                Salinidad (S) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ppm]</span>
+              </label>
+              <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ppm de NaCl</span>
+            </div>
+            <input 
+              id="salinity"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.salinity"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Temperatura (T) -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="temperature" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100">
+                Temperatura (T) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[°F]</span>
+              </label>
+              <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Rango: 200 °F a 270 °F</span>
+            </div>
+            <input 
+              id="temperature"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.temperature"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
+
     </div>
-    <h2 class="text-xl font-bold text-[#27348b] dark:text-white">Formulario Salinidad & Compresibilidad (Osif)</h2>
-    <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto font-medium">
-      Este módulo contendrá la entrada de Salinidad (ppm NaCl), Presión de yacimiento y Temperatura para obtener $C_w$ e incompresibilidad del agua.
-    </p>
-    <div class="pt-4">
-      <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-xs font-mono border border-slate-200 dark:border-slate-700">
-        [ Estado: Estructura de Navegación Lista ]
-      </span>
+
+    <!-- RIGHT COLUMN: Calculated Results (5 cols) -->
+    <div class="lg:col-span-5 space-y-4 sticky top-6">
+      
+      <!-- Results Section Title Card -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-chart-bar"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Resultado Calculado</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Correlación Osif (1988)</p>
+          </div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-extrabold">
+          En Tiempo Real
+        </span>
+      </div>
+
+      <!-- Result Card: Compresibilidad del Agua (cw) -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition space-y-6">
+        
+        <div class="space-y-2">
+          <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <i class="pi pi-sun text-[#27348b] dark:text-sky-400 text-base"></i>
+            Compresibilidad del Agua (cw)
+          </span>
+
+          <!-- High Contrast Formula Container -->
+          <div>
+            <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-3 py-1.5 rounded-lg inline-block font-mono border border-indigo-100 dark:border-slate-700 leading-normal">
+              = 1 / (7,033 &times; P + 0,5415 &times; S - 537,07 &times; T + 403300)
+            </span>
+          </div>
+        </div>
+
+        <!-- Calculated Values Display -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4">
+          
+          <!-- Scientific Notation Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Notación Científica
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatScientific(results.waterCompressibility) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+          <!-- Decimal Display -->
+          <div class="bg-slate-50 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+              Representación Decimal
+            </span>
+            <div class="flex items-baseline justify-between">
+              <div class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 font-mono tracking-tight">
+                {{ formatDecimal(results.waterCompressibility) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">
+                psi⁻¹
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 
 </div>
