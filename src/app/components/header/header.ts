@@ -35,7 +35,7 @@ export class HeaderComponent {
       icon: 'pi pi-filter'
     },
     {
-      title: 'PVT Agua (Osif)',
+      title: 'PVT Agua',
       path: '/water-pvt',
       icon: 'pi pi-sun'
     },

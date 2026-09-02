@@ -85,15 +85,15 @@
         <div *ngIf="results.constants; else noConstants" class="grid grid-cols-3 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800 text-center font-mono">
           <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante C1</span>
-            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ results.constants.c1 }}</span>
+            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ formatConstant(results.constants.c1) }}</span>
           </div>
           <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante C2</span>
-            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ results.constants.c2 }}</span>
+            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ formatConstant(results.constants.c2) }}</span>
           </div>
           <div class="bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-200 dark:border-slate-800">
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-sans">Constante C3</span>
-            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ results.constants.c3 }}</span>
+            <span class="text-xs font-bold text-slate-900 dark:text-white">{{ formatConstant(results.constants.c3) }}</span>
           </div>
         </div>
 
@@ -121,8 +121,9 @@
             </label>
             <input 
               id="temperature"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.temperature"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -136,8 +137,9 @@
             </label>
             <input 
               id="pressure"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.pressure"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -151,8 +153,9 @@
             </label>
             <input 
               id="gasInSolution"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.gasInSolution"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -166,8 +169,9 @@
             </label>
             <input 
               id="gasGravity"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.gasGravity"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -193,8 +197,9 @@
             </label>
             <input 
               id="apiGravity"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.apiGravity"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -208,8 +213,9 @@
             </label>
             <input 
               id="oilSpecificGravity"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.oilSpecificGravity"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -235,8 +241,9 @@
             </label>
             <input 
               id="gasVolumeY"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.gasVolumeY"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -250,8 +257,9 @@
             </label>
             <input 
               id="gasVolumeCS"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.gasVolumeCS"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -265,8 +273,9 @@
             </label>
             <input 
               id="shearStress"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.shearStress"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
@@ -280,8 +289,9 @@
             </label>
             <input 
               id="velocityGradient"
-              type="number" 
-              step="any"
+              type="text"
+              inputmode="decimal"
+              appDecimalComma
               [(ngModel)]="inputs.velocityGradient"
               (ngModelChange)="onInputChange()"
               class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"

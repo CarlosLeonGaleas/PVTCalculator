@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DecimalInputDirective, parseDecimalInput } from '../../directives/decimal-input.directive';
 import {
   WaterPvtService,
-  WaterPvtInputs,
   WaterPvtResults
 } from '../../services/water-pvt.service';
 
 @Component({
   selector: 'app-water-pvt',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, DecimalInputDirective],
   templateUrl: './water-pvt.html',
   styleUrl: './water-pvt.css'
 })
@@ -19,8 +19,8 @@ export class WaterPvtComponent implements OnInit {
   protected readonly pageTitle = 'COMPRESIBILIDAD DEL AGUA SALINA (OSIF, 1988)';
   protected readonly imagePath = '/assets/modules/water.svg';
 
-  // Form input model
-  public inputs: WaterPvtInputs = {
+  // Form input model (string or number for comma decimal support)
+  public inputs: any = {
     pressure: null,
     salinity: null,
     temperature: null
@@ -42,14 +42,23 @@ export class WaterPvtComponent implements OnInit {
    * Triggers real-time calculation of water compressibility.
    */
   public onInputChange(): void {
-    this.results = this.waterPvtService.calculate(this.inputs);
+    const parsed = {
+      pressure: parseDecimalInput(this.inputs.pressure),
+      salinity: parseDecimalInput(this.inputs.salinity),
+      temperature: parseDecimalInput(this.inputs.temperature)
+    };
+    this.results = this.waterPvtService.calculate(parsed);
   }
 
   /**
    * Loads sample operational values (P=5000 psia, S=80000 ppm, T=220 °F).
    */
   public loadSampleData(): void {
-    this.inputs = this.waterPvtService.getSampleInputs();
+    this.inputs = {
+      pressure: '5000',
+      salinity: '80000',
+      temperature: '220'
+    };
     this.onInputChange();
   }
 
@@ -66,23 +75,23 @@ export class WaterPvtComponent implements OnInit {
   }
 
   /**
-   * Formats compressibility result in scientific notation (e.g. 3.097 x 10^-6).
+   * Formats compressibility result in scientific notation with comma.
    */
   public formatScientific(value: number | null): string {
     if (value === null || value === undefined || isNaN(value) || !isFinite(value)) {
       return '--';
     }
-    return value.toExponential(4);
+    return value.toExponential(4).replace('.', ',');
   }
 
   /**
-   * Formats decimal representation of water compressibility.
+   * Formats decimal representation of water compressibility with comma.
    */
   public formatDecimal(value: number | null): string {
     if (value === null || value === undefined || isNaN(value) || !isFinite(value)) {
       return '--';
     }
-    return value.toFixed(8);
+    return value.toFixed(8).replace('.', ',');
   }
 
   /**

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DecimalInputDirective, parseDecimalInput } from '../../directives/decimal-input.directive';
 import {
   RockCompressibilityService,
   LithologyType,
@@ -13,7 +14,7 @@ import {
 @Component({
   selector: 'app-rock-compressibility',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, DecimalInputDirective],
   templateUrl: './rock-compressibility.html',
   styleUrl: './rock-compressibility.css'
 })
@@ -24,13 +25,13 @@ export class RockCompressibilityComponent implements OnInit {
   // Active Sub-mode tab ('pore' | 'fluid')
   public activeTab: 'pore' | 'fluid' = 'pore';
 
-  // Form input models
-  public poreInputs: PoreCompressibilityInputs = {
+  // Form input models (stored as string or number for comma input compatibility)
+  public poreInputs: { effectivePorosity: any; lithology: LithologyType } = {
     effectivePorosity: null,
     lithology: 'sandstone'
   };
 
-  public fluidInputs: FluidCompressibilityInputs = {
+  public fluidInputs: { initialVolume: any; volumeChange: any; pressureChange: any } = {
     initialVolume: null,
     volumeChange: null,
     pressureChange: null
@@ -61,11 +62,22 @@ export class RockCompressibilityComponent implements OnInit {
    */
   public onInputChange(): void {
     if (this.activeTab === 'pore') {
-      const { cf, constants } = this.rockCompressibilityService.calculatePoreCompressibility(this.poreInputs);
+      const parsedPorosity = parseDecimalInput(this.poreInputs.effectivePorosity);
+      const { cf, constants } = this.rockCompressibilityService.calculatePoreCompressibility({
+        effectivePorosity: parsedPorosity,
+        lithology: this.poreInputs.lithology
+      });
       this.poreResult = cf;
       this.currentConstants = constants;
     } else {
-      this.fluidResult = this.rockCompressibilityService.calculateFluidCompressibility(this.fluidInputs);
+      const parsedVi = parseDecimalInput(this.fluidInputs.initialVolume);
+      const parsedDv = parseDecimalInput(this.fluidInputs.volumeChange);
+      const parsedDp = parseDecimalInput(this.fluidInputs.pressureChange);
+      this.fluidResult = this.rockCompressibilityService.calculateFluidCompressibility({
+        initialVolume: parsedVi,
+        volumeChange: parsedDv,
+        pressureChange: parsedDp
+      });
     }
   }
 
@@ -74,9 +86,18 @@ export class RockCompressibilityComponent implements OnInit {
    */
   public loadSampleData(): void {
     if (this.activeTab === 'pore') {
-      this.poreInputs = this.rockCompressibilityService.getSamplePoreInputs();
+      const sample = this.rockCompressibilityService.getSamplePoreInputs();
+      this.poreInputs = {
+        effectivePorosity: '0,2',
+        lithology: sample.lithology
+      };
     } else {
-      this.fluidInputs = this.rockCompressibilityService.getSampleFluidInputs();
+      const sample = this.rockCompressibilityService.getSampleFluidInputs();
+      this.fluidInputs = {
+        initialVolume: '100',
+        volumeChange: '-2',
+        pressureChange: '500'
+      };
     }
     this.onInputChange();
   }
@@ -131,23 +152,33 @@ export class RockCompressibilityComponent implements OnInit {
   }
 
   /**
-   * Formats numbers in scientific notation.
+   * Formats numbers in scientific notation using comma as decimal separator.
    */
   public formatScientific(value: number | null): string {
     if (value === null || value === undefined || isNaN(value) || !isFinite(value)) {
       return '--';
     }
-    return value.toExponential(4);
+    return value.toExponential(4).replace('.', ',');
   }
 
   /**
-   * Formats numbers in decimal notation.
+   * Formats numbers in decimal notation using comma as decimal separator.
    */
   public formatDecimal(value: number | null, decimals: number = 8): string {
     if (value === null || value === undefined || isNaN(value) || !isFinite(value)) {
       return '--';
     }
-    return value.toFixed(decimals);
+    return value.toFixed(decimals).replace('.', ',');
+  }
+
+  /**
+   * Formats constant numbers replacing dot with comma.
+   */
+  public formatConstant(value: number | null | undefined): string {
+    if (value === null || value === undefined) {
+      return '--';
+    }
+    return String(value).replace('.', ',');
   }
 
   /**
