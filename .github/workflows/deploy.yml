@@ -31,7 +31,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -45,12 +45,12 @@ jobs:
         run: pnpm ng build --base-href /${{ github.event.repository.name }}/
 
       - name: Copy index.html to 404.html for SPA routing
-        run: cp dist/${{ github.event.repository.name }}/browser/index.html dist/${{ github.event.repository.name }}/browser/404.html
+        run: cp dist/pvt-fluid-calculator/browser/index.html dist/pvt-fluid-calculator/browser/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/${{ github.event.repository.name }}/browser
+          path: dist/pvt-fluid-calculator/browser
 
       - name: Deploy to GitHub Pages
         id: deployment

@@ -1,11 +1,17 @@
 {
   "name": "pvt-fluid-calculator",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Carlos León (Dev), Valeria Tipán, Erika Quinapallo",
+  "description": "Proyecto I+D+i 2026: Cálculadora de Propiedades PVT y Fluidos de Completación",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CarlosLeonGaleas/PVTCalculator"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:gh": "ng build --base-href /pvt-fluid-calculator/",
+    "build:gh": "ng build --base-href /PVTCalculator/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
