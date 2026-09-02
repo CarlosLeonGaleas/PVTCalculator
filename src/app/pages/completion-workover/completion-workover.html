@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
   
   <!-- Module Banner with Image + Official Title -->
   <div class="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 border border-emerald-500/30 dark:border-emerald-500/20 shadow-xl">
@@ -13,8 +13,8 @@
       <h1 class="text-2xl sm:text-3xl font-black text-[#27348b] dark:text-white tracking-tight">
         {{ pageTitle }}
       </h1>
-      <p class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm max-w-2xl font-medium">
-        Cálculo de presión hidrostática ($P_h$), densidad de salmuera de completación ($MW$) y control de pozo para operaciones de reacondicionamiento (Workover).
+      <p class="text-slate-700 dark:text-slate-300 text-sm max-w-2xl font-medium leading-relaxed">
+        Cálculos operacionales de presión hidrostática, densidad equivalente, control de pozo e hidráulica de bombeo para operaciones de completación y reacondicionamiento (Workover).
       </p>
     </div>
 
@@ -24,20 +24,558 @@
     </a>
   </div>
 
-  <!-- Form & Calculation Placeholder Container -->
-  <div class="glass-card rounded-2xl p-8 border border-slate-200 dark:border-slate-800 text-center space-y-4 my-8">
-    <div class="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto text-2xl border border-emerald-500/20">
-      <i class="pi pi-shield"></i>
+  <!-- Main Grid: Form Inputs (Left/Top) & Results (Right/Bottom) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- LEFT COLUMN: 13 Operational Input Variables (7 cols) -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Toolbar & Actions -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#27348b]/10 dark:bg-sky-500/10 text-[#27348b] dark:text-sky-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-sliders-h"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Variables de Operación</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">13 datos de entrada requeridos (enteros o reales)</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            (click)="loadSampleData()"
+            class="px-3.5 py-2 rounded-xl bg-[#ff8000]/10 hover:bg-[#ff8000]/20 text-[#ff8000] border border-[#ff8000]/30 text-xs font-extrabold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-sparkles"></i>
+            <span>Cargar Ejemplo</span>
+          </button>
+          
+          <button 
+            type="button" 
+            (click)="clearForm()"
+            class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <i class="pi pi-trash"></i>
+            <span>Limpiar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Group 1: Propiedades del Fluido y Pozo -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+        <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <i class="pi pi-filter text-[#27348b] dark:text-sky-400 text-base"></i>
+          <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+            Propiedades del Fluido y Pozo
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <!-- Densidad del Fluido (MW) -->
+          <div>
+            <label for="fluidDensity" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Densidad del Fluido (MW) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ppg]</span>
+            </label>
+            <input 
+              id="fluidDensity"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.fluidDensity"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Profundidad Vertical Verdadera (TVD) -->
+          <div>
+            <label for="tvd" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Profundidad Vertical Verdadera (TVD) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ft]</span>
+            </label>
+            <input 
+              id="tvd"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.tvd"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Caída de Presión en Espacio Anular (ΔP) -->
+          <div>
+            <label for="annularPressureDrop" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Caída de Presión en Anular (&Delta;P) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+            </label>
+            <input 
+              id="annularPressureDrop"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.annularPressureDrop"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Densidad del Acero -->
+          <div>
+            <label for="steelDensity" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Densidad del Acero <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ppg]</span>
+            </label>
+            <input 
+              id="steelDensity"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.steelDensity"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 2: Presiones de Operación y Formación -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+        <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <i class="pi pi-gauge text-[#27348b] dark:text-sky-400 text-base"></i>
+          <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+            Presiones de Operación y Formación
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <!-- Presión de Fondo Fluyente (Pwf) -->
+          <div>
+            <label for="pwf" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Presión de Fondo Fluyente (Pwf) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+            </label>
+            <input 
+              id="pwf"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.pwf"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Presión en Superficie (Ps) -->
+          <div>
+            <label for="surfacePressure" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Presión en Superficie (Ps) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+            </label>
+            <input 
+              id="surfacePressure"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.surfacePressure"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Presión de la Formación (Pf) -->
+          <div>
+            <label for="formationPressure" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Presión de Formación (Pf) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+            </label>
+            <input 
+              id="formationPressure"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.formationPressure"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Presión por Fricción (Pfr) -->
+          <div>
+            <label for="frictionPressure" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Presión por Fricción (Pfr) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[psi]</span>
+            </label>
+            <input 
+              id="frictionPressure"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.frictionPressure"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 3: Geometría y Operaciones de Bombeo -->
+      <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-5">
+        <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <i class="pi pi-arrows-alt text-[#27348b] dark:text-sky-400 text-base"></i>
+          <h3 class="text-sm font-black uppercase tracking-wider text-[#27348b] dark:text-sky-400">
+            Geometría y Operaciones de Bombeo
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          <!-- Capacidad (Cap) -->
+          <div>
+            <label for="capacity" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Capacidad (Cap) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[bbl/ft]</span>
+            </label>
+            <input 
+              id="capacity"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.capacity"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Longitud (L) -->
+          <div>
+            <label for="length" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Longitud (L) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ft]</span>
+            </label>
+            <input 
+              id="length"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.length"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Tiempo (t) -->
+          <div>
+            <label for="time" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Tiempo (t) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[horas]</span>
+            </label>
+            <input 
+              id="time"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.time"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Área (A) -->
+          <div>
+            <label for="area" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Área (A) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[ft²]</span>
+            </label>
+            <input 
+              id="area"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.area"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+
+          <!-- Caudal de Producción (q) -->
+          <div class="sm:col-span-2 md:col-span-2">
+            <label for="productionRate" class="block text-sm font-extrabold text-slate-800 dark:text-slate-100 mb-1.5">
+              Caudal de Producción (q) <span class="text-[#ff8000] dark:text-amber-400 font-bold ml-1 text-xs">[bpd]</span>
+            </label>
+            <input 
+              id="productionRate"
+              type="number" 
+              step="any"
+              [(ngModel)]="inputs.productionRate"
+              (ngModelChange)="onInputChange()"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-[#27348b] dark:focus:ring-sky-500 outline-none transition shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
+
     </div>
-    <h2 class="text-xl font-bold text-[#27348b] dark:text-white">Formulario Hidrostática & Completación</h2>
-    <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto font-medium">
-      Este módulo contendrá las variables de Profundidad Vertical (TVD), Densidad de Salmuera (ppg) y Márgenes de Seguridad para Workover.
-    </p>
-    <div class="pt-4">
-      <span class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-xs font-mono border border-slate-200 dark:border-slate-700">
-        [ Estado: Estructura de Navegación Lista ]
-      </span>
+
+    <!-- RIGHT COLUMN: 11 Calculated Results KPI Cards (5 cols) -->
+    <div class="lg:col-span-5 space-y-4 sticky top-6">
+      
+      <!-- Results Section Title -->
+      <div class="flex flex-wrap items-center justify-between gap-4 glass-panel p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base">
+            <i class="pi pi-chart-bar"></i>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">Resultados Calculados</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">11 Indicadores de Control & Hidráulica</p>
+          </div>
+        </div>
+
+        <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-xs font-extrabold">
+          En Tiempo Real
+        </span>
+      </div>
+
+      <!-- KPI Grid: 11 Calculated Items -->
+      <div class="space-y-3.5">
+        
+        <!-- 1. Presión Hidrostática (Ph) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-shield text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Presión Hidrostática (Ph)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = 0,052 &times; MW &times; TVD
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.hydrostaticPressure, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">psi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Densidad Circulatoria Equivalente (ECD) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-sync text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Densidad Circulatoria Equivalente (ECD)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = MW + (&Delta;P / (0,052 &times; TVD))
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.ecd, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">ppg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Factor de Flotabilidad (BF) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-compass text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Factor de Flotabilidad (BF)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = (65,4 - MW) / 65,4
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.buoyancyFactor, 4) }}
+              </div>
+              <span class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wide">adim</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Densidad requerida del fluido (MWreq) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-database text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Densidad requerida del fluido (MWreq)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = Pf / (0,052 &times; TVD)
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.requiredMudWeight, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">ppg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Gradiente de presión (G) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-sort-amount-down text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Gradiente de presión (G)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = Pwf / TVD
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.pressureGradient, 4) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">psi/ft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Presión de fondo del pozo (BHP) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-download text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Presión de fondo del pozo (BHP)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = Ps + Ph
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.bhp, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">psi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Presión total durante la circulación (Ptotal) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-spin pi-spinner text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Presión total en circulación (Ptotal)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = Ph + Pfr
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.totalCirculationPressure, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">psi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Volumen de fluido necesario (V) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-box text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Volumen de fluido necesario (V)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = Cap &times; L
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.requiredVolume, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">bbl</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Caudal de bombeo (Q) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-forward text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Caudal de bombeo (Q)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = V / t
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.pumpingRate, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">bbl/h</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Volumen desplazado (Vd) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-building text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Volumen desplazado (Vd)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = A &times; L
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.displacedVolume, 2) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">ft³</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. Índice de productividad (IP) -->
+        <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-[#27348b]/50 dark:hover:border-sky-500/50 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <span class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <i class="pi pi-bolt text-[#27348b] dark:text-sky-400 text-sm"></i>
+                Índice de productividad (IP)
+              </span>
+              <div class="mt-1.5">
+                <span class="text-xs font-bold text-indigo-900 dark:text-sky-300 bg-indigo-50 dark:bg-slate-800/90 px-2.5 py-1 rounded-md inline-block font-mono border border-indigo-100 dark:border-slate-700">
+                  = q / (Pf - Pwf)
+                </span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xl sm:text-2xl font-black text-[#27348b] dark:text-sky-400 font-mono tracking-tight">
+                {{ formatNumber(results.productivityIndex, 3) }}
+              </div>
+              <span class="text-xs font-extrabold text-[#ff8000] dark:text-amber-400 uppercase tracking-wide">bpd/psi</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 
 </div>
