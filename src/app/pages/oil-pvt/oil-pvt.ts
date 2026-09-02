@@ -17,7 +17,7 @@ import {
 })
 export class OilPvtComponent implements OnInit {
   protected readonly pageTitle = 'TERMODINÁMICA Y REOLOGÍA DEL PETRÓLEO';
-  protected readonly imagePath = '/assets/modules/oil.svg';
+  protected readonly imagePath = 'assets/modules/oil.svg';
 
   // Form input model (10 operational variables, string or number for comma decimal support)
   public inputs: any = {

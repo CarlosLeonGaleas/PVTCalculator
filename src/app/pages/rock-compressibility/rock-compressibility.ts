@@ -20,7 +20,7 @@ import {
 })
 export class RockCompressibilityComponent implements OnInit {
   protected readonly pageTitle = 'COMPRESIBILIDAD DE ROCA Y FLUIDO';
-  protected readonly imagePath = '/assets/modules/rock.svg';
+  protected readonly imagePath = 'assets/modules/rock.svg';
 
   // Active Sub-mode tab ('pore' | 'fluid')
   public activeTab: 'pore' | 'fluid' = 'pore';

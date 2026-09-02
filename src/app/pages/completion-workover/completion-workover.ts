@@ -17,7 +17,7 @@ import {
 })
 export class CompletionWorkoverComponent implements OnInit {
   protected readonly pageTitle = 'COMPLETACIÓN Y WORKOVER';
-  protected readonly imagePath = '/assets/modules/completion.svg';
+  protected readonly imagePath = 'assets/modules/completion.svg';
 
   // Form input model (13 operational variables, string or number for comma decimal support)
   public inputs: any = {

@@ -17,7 +17,7 @@ import {
 })
 export class WaterPvtComponent implements OnInit {
   protected readonly pageTitle = 'COMPRESIBILIDAD DEL AGUA SALINA (OSIF, 1988)';
-  protected readonly imagePath = '/assets/modules/water.svg';
+  protected readonly imagePath = 'assets/modules/water.svg';
 
   // Form input model (string or number for comma decimal support)
   public inputs: any = {
